@@ -44,7 +44,7 @@ if($_SERVER['REQUEST_METHOD']   == 'POST')
 <div class="body-content">
   <div class="module">
     <h1>workshop Organised for Student</h1>
-    <form class="form" action="wr3.php" method="post" enctype="multipart/form-data" autocomplete="off">
+    <form class="form" action="" method="post" enctype="multipart/form-data" autocomplete="off">
       <div class="alert alert-error"></div>
       Name of faculty:<br>
    <input type="text" name="workshoporg"><br>

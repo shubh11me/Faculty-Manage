@@ -47,7 +47,7 @@ if($_SERVER['REQUEST_METHOD']   == 'POST')
 <div class="body-content">
   <div class="module">
     <h1>National Level Paper Publication</h1>
-    <form class="form" action="a1.php" method="post" enctype="multipart/form-data" autocomplete="off">
+    <form class="form" action="" method="post" enctype="multipart/form-data" autocomplete="off">
       <div class="alert alert-error"></div>
       Author 1:<br>
    <input type="text" name="Author1"><br>
