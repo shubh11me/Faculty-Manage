@@ -49,7 +49,7 @@ if($_SERVER['REQUEST_METHOD']   == 'POST')
       Name of faculty:<br>
    <input type="text" name="workshoporg"><br>
     Worshop Name:<br>
-   <input type="text" name="fdpname"><br>
+   <input type="text" name="workshopname"><br>
    
     From Date:<br>
    <input type="date" name="fromdate"><br>
