@@ -1,6 +1,7 @@
 <?php 
 session_start();
 $_SESSION['message']='';
+include './functions.php';
 // Create connection
 $mysqli = new mysqli('localhost','root' ,'','accounts' );
 // Check connection
@@ -24,6 +25,8 @@ if($_SERVER['REQUEST_METHOD']   == 'POST')
               if($mysqli->query($sql)== true)
               {
                 $_SESSION['message']="Successfully Inserted";
+                $last_id= $mysqli->insert_id;
+                genID($last_id,"fdpatt","fdpatt_id","FDPAttended");
               }
 
              else {
