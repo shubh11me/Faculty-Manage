@@ -8,7 +8,6 @@ if (!isset($_SESSION['username'])) {
 $FDPAttended = $_SESSION['user_id'];
 $FDPAttendedAdded = $_SESSION['user_id'];
 
-include './functions.php';
 // Create connection
 $mysqli = new mysqli('localhost', 'root', '', 'accounts');
 // Check connection
@@ -66,7 +65,7 @@ if ($_SERVER['REQUEST_METHOD']   == 'POST') {
           Name of faculty:<br>
           <select name="FDPAttended" id="">
 
-            <option value="def">Select Faculty</option>
+            <option disabled selected value="def">Select Faculty</option>
             <?php
             while ($users = mysqli_fetch_assoc($users_q)) {
               echo "<option value='" . $users['user_id'] . "'>" . $users['username'] . "</option>";

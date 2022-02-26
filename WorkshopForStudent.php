@@ -1,8 +1,15 @@
 <?php 
 session_start();
 $_SESSION['message']='';
+include './functions.php';
+
 // Create connection
 $mysqli = new mysqli('localhost','root' ,'','accounts' );
+if (!isset($_SESSION['username'])) {
+  echo '<script>window.location.href="login.php"</script>';
+}
+$workshoporg=$_SESSION['user_id'];
+$workshoporgAddedBy=$_SESSION['user_id'];
 // Check connection
 if ($mysqli->connect_error) {
     die("Connection failed: " . $mysqli->connect_error);
@@ -11,7 +18,9 @@ echo "Connected successfully";
 if($_SERVER['REQUEST_METHOD']   == 'POST')
 {
         // success!
+        if ($_SESSION['role'] == 'admin') {
              $workshoporg= $mysqli->real_escape_string($_POST['workshoporg']);
+        }
              $workshopname= $mysqli->real_escape_string($_POST['workshopname']);
              $fromdate= $mysqli->real_escape_string($_POST['fromdate']);
              
@@ -19,17 +28,21 @@ if($_SERVER['REQUEST_METHOD']   == 'POST')
              $level= $mysqli->real_escape_string($_POST['level']);
               
 
- $sql= "INSERT INTO `wsorgfstud`(`workshoporg`, `workshopname`, `fromdate`, `todate`, `level`) VALUES('$workshoporg','$workshopname','$fromdate','$todate','$level');";
+ $sql= "INSERT INTO `wsorgfstud`(`workshoporg`, `workshopname`, `fromdate`, `todate`, `level`,`wsorgfstud_added_by`, `wsorgfstud_user_id`) 
+ VALUES('$workshoporg','$workshopname','$fromdate','$todate','$level','$workshoporgAddedBy','$workshoporg');";
 
               if($mysqli->query($sql)== true)
               {
-                $_SESSION['message']="Successfully Inserted";
-              }
+                $last_id = $mysqli->insert_id;
+
+                genID($last_id,'wsorgfstud','wsorgfstud_id','wsorgfstud');
+                alert("success");  
+                            }
 
              else {
                     // failed 
 
-                    $_SESSION['message']="Unsuccessful";
+                    alert("Unsuccessful");
 
                   }
 }
@@ -46,8 +59,24 @@ if($_SERVER['REQUEST_METHOD']   == 'POST')
     <h1>workshop Organised for Student</h1>
     <form class="form" action="" method="post" enctype="multipart/form-data" autocomplete="off">
       <div class="alert alert-error"></div>
-      Name of faculty:<br>
-   <input type="text" name="workshoporg"><br>
+      <?php
+        if ($_SESSION['role'] == 'admin') {
+          $users_q = mysqli_query($mysqli, "select * from users");
+
+        ?>
+          Name of faculty:<br>
+          <select name="workshoporg" id="">
+
+            <option disabled selected value="def">Select Faculty</option>
+            <?php
+            while ($users = mysqli_fetch_assoc($users_q)) {
+              echo "<option value='" . $users['user_id'] . "'>" . $users['username'] . "</option>";
+            }
+            ?>
+          </select><br>
+        <?php
+
+        } ?>
     Worshop Name:<br>
    <input type="text" name="workshopname"><br>
    
