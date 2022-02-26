@@ -9,4 +9,11 @@ function genID($lastid,$tableName,$columnName,$prefix){
          genID($lastid,$tableName,$columnName,$prefix);
     }
 }
+
+
+function alert($message)
+{
+    echo "<script>alert('$message')</script>";
+}
+
 ?>

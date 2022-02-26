@@ -8,7 +8,7 @@ if(isset($_POST['Submit']))
 {
 $username = trim($_POST['username']);
 $password = trim($_POST['password']);
-$query = "SELECT username, password FROM users WHERE username='$username' 
+$query = "SELECT * FROM users WHERE username='$username' 
 AND password='$password'";
 
 $result = mysqli_query($mysqli,$query)or die(mysqli_error($mysql));
@@ -16,9 +16,13 @@ $num_row = mysqli_num_rows($result);
 $row=mysqli_fetch_array($result);
 if( $num_row ==1 )
      {
+        //  var_dump($row);
+ $_SESSION['user_id']=$row['user_id'];
  $_SESSION['username']=$row['username'];
+ $_SESSION['email']=$row['email'];
+ $_SESSION['role']=$row['role'];
+ $_SESSION['user_added_by']=$row['user_added_by'];
  echo '<script>window.location.href="Home.php"</script>';
- echo 'hi there';
  exit;
   }
   else

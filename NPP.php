@@ -7,6 +7,10 @@ $mysqli = new mysqli('localhost','root' ,'','accounts' );
 if ($mysqli->connect_error) {
     die("Connection failed: " . $mysqli->connect_error);
 } 
+if (!isset($_SESSION['username'])) {
+  echo '<script>window.location.href="login.php"</script>';
+}
+$user_id = $_SESSION['user_id'];
 echo "Connected successfully";
 if($_SERVER['REQUEST_METHOD']   == 'POST')
 {
@@ -22,7 +26,9 @@ if($_SERVER['REQUEST_METHOD']   == 'POST')
               $DOI= $mysqli->real_escape_string($_POST['DOI']);
 
 
- $sql= "INSERT INTO `npaperpublication`(`Author1`, `Author2`, `PaperTitle`, `JournalName`, `DOP`, `Volume`, `Pagenos`, `DOI`) VALUES('$Author1','$Author2','$PaperTitle','$JournalName','$DOP','$Volume','$Pagenos','$DOI');";
+ $sql= "INSERT INTO `npaperpublication`(`Author1`, `Author2`, `PaperTitle`, `JournalName`, `DOP`, `Volume`, `Pagenos`, `DOI`,`npaperpublication_added_by`
+ ,`npaperpublication_user_id`)
+  VALUES('$Author1','$Author2','$PaperTitle','$JournalName','$DOP','$Volume','$Pagenos','$DOI','$user_id','$user_id');";
 
               if($mysqli->query($sql)== true)
               {

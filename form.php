@@ -1,50 +1,54 @@
-<?php 
+<?php
 session_start();
-$_SESSION['message']='';
+$_SESSION['message'] = '';
 // Create connection
-$mysqli = new mysqli('localhost','root' ,'', 'accounts' );
+include './functions.php';
+$mysqli = new mysqli('localhost', 'root', '', 'accounts');
 // Check connection
 if ($mysqli->connect_error) {
-    die("Connection failed: " . $mysqli->connect_error);
-} 
-echo "Connected successfully";
-if($_SERVER['REQUEST_METHOD']   == 'POST')
-{
-    if ($_POST['password'] == $_POST['confirmpassword'])
-      {
-        // success!
-             $username= $mysqli->real_escape_string($_POST['username']);
-             $email= $mysqli->real_escape_string($_POST['email']);
-             $password= $mysqli->real_escape_string($_POST['password']);
-             $confirmpassword= md5($_POST['confirmpassword']);
-
-
-               $sql= "INSERT INTO `users` (`username`, `email`, `password`, `confirmpassword`) VALUES('$username','$email','$password','$confirmpassword');";
-
-              if($mysqli->query($sql)== true)
-              {
-                $_SESSION['message']="Successfully Inserted";
-              }
-
-             else {
-                    // failed 
-
-                    $_SESSION['message']="Unsuccessful";
-
-                  }
+  die("Connection failed: " . $mysqli->connect_error);
 }
-     else {
-       // failed 
+echo "Connected successfully";
+if ($_SERVER['REQUEST_METHOD']   == 'POST') {
+  if ($_POST['password'] == $_POST['confirmpassword']) {
+    // success!
+    $username = $mysqli->real_escape_string($_POST['username']);
+    $email = $mysqli->real_escape_string($_POST['email']);
+    $password = $mysqli->real_escape_string($_POST['password']);
+    $confirmpassword = md5($_POST['confirmpassword']);
 
-         $_SESSION['message']="plz check password";
-         }
+    $exist = mysqli_query($mysqli, "select * from users where email='$email'");
 
+    if (mysqli_num_rows($exist) == 0) {
+      # code...
+
+      $sql = "INSERT INTO `users` (`username`, `email`, `password`, `confirmpassword`,`role`,`user_added_by`) VALUES('$username','$email','$password','$confirmpassword','faculty','self');";
+
+      if ($mysqli->query($sql) == true) {
+        $last_id = $mysqli->insert_id;
+
+        genID($last_id, "users", "user_id", "users");
+        alert("Faculty is registered Successfully");
+      } else {
+        // failed 
+
+        alert("Faculty is registration Failed");
+      }
+    }else{
+      alert("Email Already Exists");
+
+    }
+  } else {
+    // failed 
+
+    alert("Please check password and confirm password");
+  }
 }
 
 ?>
 
 
-<link href="//db.onlinewebfonts.com/c/a4e256ed67403c6ad5d43937ed48a77b?family=Core+Sans+N+W01+35+Light" rel="stylesheet" type="text/css"/>
+<link href="//db.onlinewebfonts.com/c/a4e256ed67403c6ad5d43937ed48a77b?family=Core+Sans+N+W01+35+Light" rel="stylesheet" type="text/css" />
 <link rel="stylesheet" href="form.css" type="text/css">
 <div class="body-content">
   <div class="module">
@@ -55,7 +59,7 @@ if($_SERVER['REQUEST_METHOD']   == 'POST')
       <input type="email" placeholder="Email" name="email" required />
       <input type="password" placeholder="Password" name="password" autocomplete="new-password" required />
       <input type="password" placeholder="Confirm Password" name="confirmpassword" autocomplete="new-password" required />
-      
+
       <input type="submit" value="Register" name="register" class="btn btn-block btn-primary" />
     </form>
   </div>

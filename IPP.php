@@ -1,9 +1,16 @@
 <?php 
 session_start();
+include './functions.php';
+
 $_SESSION['message']='';
 // Create connection
 $mysqli = new mysqli('localhost','root' ,'','accounts' );
 // Check connection
+if (!isset($_SESSION['username'])) {
+  echo '<script>window.location.href="login.php"</script>';
+}
+$user_id = $_SESSION['user_id'];
+
 if ($mysqli->connect_error) {
     die("Connection failed: " . $mysqli->connect_error);
 } 
@@ -22,17 +29,18 @@ if($_SERVER['REQUEST_METHOD']   == 'POST')
               $DOI= $mysqli->real_escape_string($_POST['DOI']);
 
 
- $sql= "INSERT INTO `inpaperpublication`(`Author1`, `Author2`, `PaperTitle`, `JournalName`, `DOP`, `Volume`, `Pagenos`, `DOI`) VALUES('$Author1','$Author2','$PaperTitle','$JournalName','$DOP','$Volume','$Pagenos','$DOI');";
+ $sql= "INSERT INTO `inpaperpublication`(`Author1`, `Author2`, `PaperTitle`, `JournalName`, `DOP`, `Volume`, `Pagenos`, `DOI`, `inpaperpublication_added_by`,`inpaperpublication_user_id`)
+  VALUES('$Author1','$Author2','$PaperTitle','$JournalName','$DOP','$Volume','$Pagenos','$DOI','$user_id','$user_id');";
 
               if($mysqli->query($sql)== true)
               {
-                $_SESSION['message']="Successfully Inserted";
+                alert("success");
               }
 
              else {
                     // failed 
 
-                    $_SESSION['message']="Unsuccessful";
+                    alert("unsuccessful");
 
                   }
 }
